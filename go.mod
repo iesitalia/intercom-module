@@ -1,4 +1,4 @@
-module intercom
+module github.com/iesitalia/intercom-module
 
 go 1.21.4
 

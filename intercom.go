@@ -8,9 +8,10 @@ import (
 )
 
 var app *fiber.App
+var manifest Manifest
 
 func Register(connector Connector) {
-	var manifest Manifest
+
 	err := manifest.Load("manifest.json")
 	if err != nil {
 		log.Fatal(err)
@@ -18,6 +19,11 @@ func Register(connector Connector) {
 	var port = args.Get("-p")
 	if port == "" {
 		port = manifest.Port
+	}
+	setupDatabase()
+	err = manifest.LoadConfig()
+	if err != nil {
+		log.Fatal(err)
 	}
 	app = fiber.New(fiber.Config{
 		DisableStartupMessage: true,
@@ -33,7 +39,9 @@ func Register(connector Connector) {
 	}))
 
 	connector.Router(app)
-	var controller = Controller{}
+	var controller = Controller{
+		manifest: &manifest,
+	}
 	app.Get("/health", controller.HealthCheckHandler)
 	app.Get("/config", controller.GetConfigHandler)
 	app.Post("/config", controller.SetConfigHandler)
