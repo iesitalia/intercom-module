@@ -220,7 +220,7 @@ func (c Controller) GetQueue() {
 
 		var messages []Message
 		var processID = strconv.FormatInt(time.Now().UnixNano(), 24)
-		if db.Debug().Model(Message{}).Where("status = ? AND process_id = ''", STATE_WAITING).Limit(space).UpdateColumns(map[string]interface{}{
+		if db.Debug().Model(Message{}).Where("`type` = ? AND status = ? AND process_id = ''", c.manifest.Type, STATE_WAITING).Limit(space).UpdateColumns(map[string]interface{}{
 			"process_id": processID,
 			"status":     STATE_QUEUED,
 		}).RowsAffected > 0 {
