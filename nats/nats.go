@@ -8,6 +8,7 @@ var Client *nats.Conn
 var topic string = ""
 var Connected = false
 
+// fixed input
 func Register(prefix, server, username, password string) error {
 	var err error
 
