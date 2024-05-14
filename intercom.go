@@ -28,7 +28,7 @@ func Register(connector Connector) {
 		port = manifest.Port
 	}
 	setupDatabase()
-	err = nats.Register(args.Get("-db-database"), args.Get("-db-server"), args.Get("-nats-username"), args.Get("-db-password"))
+	err = nats.Register(args.Get("-db-database"), args.Get("-nats-server"), args.Get("-nats-username"), args.Get("-nats-password"))
 	if err != nil {
 		log.Error(err)
 	}
