@@ -7,13 +7,14 @@ import (
 	"github.com/getevo/evo/v2/lib/log"
 	"github.com/gofiber/fiber/v2"
 	"github.com/tidwall/gjson"
+	"time"
 )
 
 type Connector interface {
 	Register(manifest *Manifest) error
 	Router(app *fiber.App)
 	Name() string
-	Send(recipients []string, subject string, message string, params ...Parameter)
+	Send(message *Message) error
 	WhenReady() error
 }
 
@@ -46,13 +47,21 @@ type Test struct {
 }
 
 type Manifest struct {
-	Name               string         `gorm:"column:name;primaryKey" json:"name"`
-	Description        string         `gorm:"column:description" json:"description"`
-	Port               string         `gorm:"column:port" json:"port"`
-	Type               string         `gorm:"column:type" json:"type"`
-	ConfigurationValue string         `gorm:"column:configuration" json:"-"`
-	Configuration      Configurations `gorm:"-" json:"configuration"`
-	Test               []Test         `gorm:"-" json:"test"`
+	Name                         string         `gorm:"column:name;primaryKey" json:"name"`
+	Description                  string         `gorm:"column:description" json:"description"`
+	Port                         string         `gorm:"column:port;unique" json:"port"`
+	Type                         string         `gorm:"column:type;type:enum('sms','notification','email')" json:"type"`
+	Repository                   string         `gorm:"column:repository;type:varchar(512)" json:"repository"`
+	ConcurrentMessageDispatchers int            `gorm:"column:concurrent_message_dispatchers;default:4" json:"concurrent_message_dispatchers"`
+	MaxQueueSize                 int            `gorm:"column:max_queue_size;default:200" json:"max_queue_size"`
+	RateLimit                    int            `gorm:"column:rate_limit;default:10" json:"rate_limit"`
+	RateLimitDurationValue       string         `gorm:"column:rate_limit_duration;default:'10s''" json:"rate_limit_duration_value"`
+	Enabled                      bool           `gorm:"column:enabled;default:1" json:"enabled"`
+	RateLimitDuration            time.Duration  `gorm:"-" json:"rate_limit_duration"`
+	ConfigurationValue           string         `gorm:"column:configuration" json:"-"`
+	Configuration                Configurations `gorm:"-" json:"configuration"`
+	Test                         []Test         `gorm:"-" json:"test"`
+	Queue                        Queue          `gorm:"-" json:"-"`
 }
 
 func (m *Manifest) TableName() string {
@@ -71,6 +80,13 @@ func (m *Manifest) LoadConfig() error {
 	var data = gjson.Parse(m.ConfigurationValue)
 	for idx, conf := range m.Configuration {
 		m.Configuration[idx].Value = data.Get(conf.Name).String()
+	}
+	var err error
+	m.RateLimitDuration, err = time.ParseDuration(m.RateLimitDurationValue)
+	if err != nil {
+		log.Critical(err)
+		m.RateLimitDuration = 30 * time.Second
+		return err
 	}
 	return nil
 }
