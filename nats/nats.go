@@ -1,7 +1,6 @@
 package nats
 
 import (
-	"github.com/getevo/evo/v2/lib/args"
 	"github.com/nats-io/nats.go"
 )
 
@@ -9,12 +8,12 @@ var Client *nats.Conn
 var topic string = ""
 var Connected = false
 
-func Register(prefix string) error {
+func Register(prefix, server, username, password string) error {
 	var err error
-	server := args.Get("-nats-server")
+
 	var options []nats.Option
-	if args.Get("-nats-username") != "" {
-		options = append(options, nats.UserInfo(args.Get("-nats-username"), args.Get("-nats-password")))
+	if username != "" {
+		options = append(options, nats.UserInfo(username, password))
 	}
 
 	Client, err = nats.Connect(server, options...)
