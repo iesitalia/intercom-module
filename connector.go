@@ -76,7 +76,7 @@ func (m *Manifest) Load(s string) error {
 	return json.Unmarshal(file, m)
 }
 func (m *Manifest) LoadConfig() error {
-	db.Where("name =?", m.Name).First(&m)
+	db.Debug().Where("name =?", m.Name).First(&m)
 	var data = gjson.Parse(m.ConfigurationValue)
 	for idx, conf := range m.Configuration {
 		m.Configuration[idx].Value = data.Get(conf.Name).String()
