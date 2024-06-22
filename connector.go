@@ -13,7 +13,7 @@ type Connector interface {
 	Register() error
 	Router() error
 	WhenReady() error
-	SetManifest(manifest *Manifest) (Connector, error)
+	SetManifest() (Connector, error)
 	GetManifest() *Manifest
 	Send(message *Message) error
 	Name() string
