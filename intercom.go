@@ -48,7 +48,7 @@ func Register(connector Connector) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	connector, err = connector.SetManifest(&manifest)
+	connector, err = connector.SetManifest()
 	if err != nil {
 		log.Fatal(err)
 	}
