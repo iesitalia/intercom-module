@@ -44,7 +44,11 @@ func Register(connector Connector) {
 		DisableStartupMessage: true,
 		ServerHeader:          connector.Name(),
 	})
-	err = connector.Register(&manifest)
+	err = connector.Register()
+	if err != nil {
+		log.Fatal(err)
+	}
+	connector, err = connector.SetManifest(&manifest)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +60,10 @@ func Register(connector Connector) {
 		Format: ">${time} | ${status} | ${latency} | " + connector.Name() + " | ${method} | ${path} | ${error}\n ",
 	}))
 
-	connector.Router(app)
+	err = connector.Router()
+	if err != nil {
+		log.Critical(err)
+	}
 	var controller = Controller{
 		manifest:  &manifest,
 		connector: connector,

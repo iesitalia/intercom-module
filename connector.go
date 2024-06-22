@@ -5,17 +5,18 @@ import (
 	"github.com/getevo/evo/v2/lib/db"
 	"github.com/getevo/evo/v2/lib/gpath"
 	"github.com/getevo/evo/v2/lib/log"
-	"github.com/gofiber/fiber/v2"
 	"github.com/tidwall/gjson"
 	"time"
 )
 
 type Connector interface {
-	Register(manifest *Manifest) error
-	Router(app *fiber.App)
-	Name() string
-	Send(message *Message) error
+	Register() error
+	Router() error
 	WhenReady() error
+	SetManifest(manifest *Manifest) (Connector, error)
+	Send(message *Message) error
+	Name() string
+	RegisterPriority() int
 }
 
 type Parameter struct {
