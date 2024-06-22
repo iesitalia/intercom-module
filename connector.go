@@ -14,6 +14,7 @@ type Connector interface {
 	Router() error
 	WhenReady() error
 	SetManifest(manifest *Manifest) (Connector, error)
+	GetManifest() *Manifest
 	Send(message *Message) error
 	Name() string
 	RegisterPriority() int
