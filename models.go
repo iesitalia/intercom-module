@@ -56,7 +56,7 @@ type Body struct {
 	Body          string     `gorm:"column:body;type:text" json:"message"`
 	Language      string     `gorm:"column:language;size:2;default:'en'"  json:"language"`
 	Params        types.JSON `gorm:"column:params" json:"params"`
-	Rendered      bool       `gorm:"column:rendered;default:false" json:"rendered"`
+	Rendered      bool       `gorm:"column:rendered;default:0" json:"rendered"`
 	CreatedAt
 }
 
