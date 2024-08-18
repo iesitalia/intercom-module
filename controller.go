@@ -133,10 +133,11 @@ func (c Controller) SendHandler(ctx *fiber.Ctx) error {
 		var message = &messages[idx]
 		body = message.Render(body)
 		var body = Body{
-			MessageID: message.MessageID,
+			MessageID: &message.MessageID,
 			Body:      body,
 			Title:     ctx.FormValue("title"),
 			Params:    b,
+			Rendered:  true,
 		}
 		message.Body = &body
 		bodies = append(bodies, body)
