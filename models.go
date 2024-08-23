@@ -16,24 +16,23 @@ func (Batch) TableName() string {
 }
 
 type Message struct {
-	MessageID     int64        `gorm:"column:message_id;primaryKey;autoIncrement" json:"message_id"`
-	BatchID       int64        `gorm:"column:batch_id;index;fk:message_batch" json:"batch_id"`
-	TrackingID    string       `gorm:"column:tracker_id;index;size:128" json:"tracker_id"`
-	Recipient     string       `gorm:"column:recipient;type:varchar(255)" json:"recipient"`
-	RecipientType string       `gorm:"column:recipient_type;type:enum('address','list')"`
-	Type          string       `gorm:"column:type;type:enum('email','sms','notification');index" json:"type"`
-	Connector     string       `gorm:"column:connector;type:varchar(32);index" json:"connector"`
-	Priority      int          `gorm:"column:priority" json:"priority"`
-	State         string       `gorm:"column:status;type:enum('waiting','queued','processing','failed','sent');index" json:"state"`
-	ProcessID     string       `gorm:"column:process_id;type:varchar(64)" json:"process_id"`
-	Error         string       `gorm:"column:error;type:varchar(255)" json:"error"`
-	SentAt        *time.Time   `gorm:"column:sent_at;default:NULL" json:"sent_at"`
-	Opened        bool         `gorm:"column:opened" json:"opened"`
-	OpenedAt      *time.Time   `gorm:"column:opened_at;default:NULL" json:"opened_at"`
-	Clicked       bool         `gorm:"column:clicked" json:"clicked"`
-	ClickedAt     *time.Time   `gorm:"column:clicked_at;default:NULL" json:"clicked_at"`
-	Body          *Body        `json:"body"`
-	Attachments   []Attachment `json:"attachments"`
+	MessageID   int64        `gorm:"column:message_id;primaryKey;autoIncrement" json:"message_id"`
+	BatchID     int64        `gorm:"column:batch_id;index;fk:message_batch" json:"batch_id"`
+	TrackingID  string       `gorm:"column:tracker_id;index;size:128" json:"tracker_id"`
+	Recipient   string       `gorm:"column:recipient;type:varchar(255)" json:"recipient"`
+	Type        string       `gorm:"column:type;type:enum('email','sms','notification');index" json:"type"`
+	Connector   string       `gorm:"column:connector;type:varchar(32);index" json:"connector"`
+	Priority    int          `gorm:"column:priority" json:"priority"`
+	State       string       `gorm:"column:status;type:enum('waiting','queued','processing','failed','sent');index" json:"state"`
+	ProcessID   string       `gorm:"column:process_id;type:varchar(64)" json:"process_id"`
+	Error       string       `gorm:"column:error;type:varchar(255)" json:"error"`
+	SentAt      *time.Time   `gorm:"column:sent_at;default:NULL" json:"sent_at"`
+	Opened      bool         `gorm:"column:opened" json:"opened"`
+	OpenedAt    *time.Time   `gorm:"column:opened_at;default:NULL" json:"opened_at"`
+	Clicked     bool         `gorm:"column:clicked" json:"clicked"`
+	ClickedAt   *time.Time   `gorm:"column:clicked_at;default:NULL" json:"clicked_at"`
+	Body        *Body        `json:"body"`
+	Attachments []Attachment `json:"attachments"`
 	CreatedAt
 	UpdatedAt
 	LinkedList
