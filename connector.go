@@ -16,6 +16,7 @@ type Connector interface {
 	SetManifest() (Connector, error)
 	GetManifest() *Manifest
 	Send(message *Message) error
+	BulkSend(message *Message, recipients []string) error
 	Name() string
 	RegisterPriority() int
 }
