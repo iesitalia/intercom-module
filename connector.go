@@ -16,7 +16,7 @@ type Connector interface {
 	SetManifest() (Connector, error)
 	GetManifest() *Manifest
 	Send(message *Message) error
-	BulkSend(message *Message, recipients []string) error
+	BulkSend(message *Message, recipients []string,onSend func(message *Message,sent int64,failed int64)) error
 	Name() string
 	RegisterPriority() int
 }

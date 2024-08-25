@@ -18,6 +18,7 @@ func (Batch) TableName() string {
 type Message struct {
 	MessageID   int64        `gorm:"column:message_id;primaryKey;autoIncrement" json:"message_id"`
 	BatchID     int64        `gorm:"column:batch_id;index;fk:message_batch" json:"batch_id"`
+	CampaignID  *int64        `gorm:"column:campaign_id;index;fk:campaign;default:NULL" "campaign_id"`
 	TrackingID  string       `gorm:"column:tracker_id;index;size:128" json:"tracker_id"`
 	Recipient   string       `gorm:"column:recipient;type:varchar(255)" json:"recipient"`
 	Type        string       `gorm:"column:type;type:enum('email','sms','notification');index" json:"type"`
